@@ -511,13 +511,13 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
 
   // Generate sections array with conditional referral journey - Updated order
   const accordionSections = [
+    "child-profile-team",
     "screening-history",
     "developmental-ages",
     "delta-analysis",
     "timeline",
     "school-readiness",
-    ...(isEligibleForReferralJourney ? ["referrals-journey"] : []),
-    "child-profile-team"
+    ...(isEligibleForReferralJourney ? ["referrals-journey"] : [])
   ];
 
   return (
@@ -545,10 +545,293 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
         </div>
 
         {/* Collapsible Sections using Accordion */}
-        <Accordion type="multiple" defaultValue={accordionSections} className="space-y-4">
+        <Accordion type="multiple" defaultValue={["child-profile-team", ...accordionSections.slice(1)]} className="space-y-4">
           
-          {/* 1. Screening History Section */}
-          <AccordionItem value="screening-history" className="bg-white/80 backdrop-blur-sm border border-rose-200 rounded-xl shadow-lg">
+          {/* 1. Child Profile & Support Team Section */}
+          <AccordionItem value="child-profile-team" className="bg-white/80 backdrop-blur-sm border border-rose-200 rounded-xl shadow-lg">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline">
+              <div className="flex items-center space-x-3">
+                <Users className="w-6 h-6 text-indigo-600" />
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold">Child Profile & Support Team</h3>
+                  <p className="text-sm text-gray-600">Child information, quick stats, family contact details, and care team members</p>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-6 pb-6">
+              <div className="space-y-8">
+
+                {/* Child Header Information - Moved from sticky header */}
+                <div className="bg-gradient-to-r from-rose-100 via-pink-100 to-orange-100 rounded-2xl p-6 shadow-lg border border-rose-200">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Child Photo & Basic Info */}
+                    <div className="lg:col-span-1">
+                      <div className="text-center space-y-3">
+                        <div className="relative inline-block">
+                          <Avatar className="w-24 h-24 border-4 border-white shadow-xl">
+                            <AvatarImage src={child.photoUrl} alt={child.name} />
+                            <AvatarFallback className="bg-gradient-to-br from-pink-200 to-orange-200">
+                              {child.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="absolute -bottom-1 -right-1">
+                            <Badge className={`${getChildStatusColor(child.status)} text-xs`}>
+                              {child.status.replace('-', ' ')}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-xl font-bold text-slate-800">{child.name}</h1>
+                          <p className="text-sm text-slate-600">{child.age} years • {child.gender === 'M' ? 'Male' : 'Female'}</p>
+                          {isEligibleForReferralJourney && (
+                            <Badge className="text-xs bg-purple-100 text-purple-700 border-purple-200 mt-2">
+                              <Route className="w-3 h-3 mr-1" />
+                              Referral Journey Active
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Stats */}
+                    <div className="lg:col-span-2">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className="text-xl font-bold text-emerald-600">{child.schoolReadinessScore}%</div>
+                          <div className="text-sm text-slate-600">School Readiness</div>
+                        </div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className="text-xl font-bold text-orange-600">{consolidatedStats.areasOfConcern}</div>
+                          <div className="text-sm text-slate-600">Areas of Concern</div>
+                        </div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className="text-xl font-bold text-violet-600">{consolidatedStats.totalInterventions}</div>
+                          <div className="text-sm text-slate-600">Interventions</div>
+                        </div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className={`text-xl font-bold ${getRiskLevelColor(consolidatedStats.riskLevel).includes('rose') ? 'text-rose-600' :
+                            getRiskLevelColor(consolidatedStats.riskLevel).includes('orange') ? 'text-orange-600' : 'text-emerald-600'}`}>
+                            {consolidatedStats.riskLevel}
+                          </div>
+                          <div className="text-sm text-slate-600">Risk Level</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Support Team Sub-section */}
+                <div>
+                  <h4 className="text-lg font-semibold text-indigo-800 mb-6 flex items-center space-x-2">
+                    <UserCheck className="w-5 h-5" />
+                    <span>Care & Support Team</span>
+                  </h4>
+
+                  {/* Child Personal Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl mb-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <User className="w-6 h-6 text-blue-600" />
+                        <h5 className="font-semibold text-blue-800">Personal Information</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Baby className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Age: {child.age} years ({child.ageInMonths} months)</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Born: {child.dateOfBirth}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">{child.address}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <Heart className="w-6 h-6 text-purple-600" />
+                        <h5 className="font-semibold text-purple-800">Family Contact</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Users className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Parent: {child.parentName}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">{child.parentPhone}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Care Team Members */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Anganwadi Teacher */}
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <BookOpen className="w-6 h-6 text-green-600" />
+                        <h5 className="font-semibold text-green-800">Anganwadi Teacher</h5>
+                      </div>
+
+                      <div className="text-center mb-4">
+                        <Avatar className="w-16 h-16 mx-auto mb-3 border-4 border-white shadow-lg">
+                          <AvatarImage src={child.anganwadiTeacher.photoUrl} />
+                          <AvatarFallback className="bg-green-100 text-green-700">
+                            {child.anganwadiTeacher.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h6 className="font-semibold text-green-800">{child.anganwadiTeacher.name}</h6>
+                        <p className="text-sm text-green-600">ID: {child.anganwadiTeacher.id}</p>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-slate-700">{child.anganwadiTeacher.phone}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <GraduationCap className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-slate-700">{child.anganwadiTeacher.qualification}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Award className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-slate-700">{child.anganwadiTeacher.experience} experience</span>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-green-200 mb-4">
+                        <h6 className="font-medium text-green-800 mb-2">Anganwadi Center</h6>
+                        <div className="space-y-1">
+                          <div className="text-sm text-slate-700">{child.anganwadiCenter.name}</div>
+                          <div className="text-sm text-slate-600">{child.anganwadiCenter.address}</div>
+                          <div className="text-sm text-slate-600">
+                            Code: {child.anganwadiCenter.code} • {child.anganwadiCenter.totalChildren} children
+                          </div>
+                        </div>
+                      </div>
+
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Contact Teacher
+                      </Button>
+                    </div>
+
+                    {/* Carengrow Coordinator */}
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <UserCheck className="w-6 h-6 text-blue-600" />
+                        <h5 className="font-semibold text-blue-800">Carengrow Coordinator</h5>
+                      </div>
+
+                      <div className="text-center mb-4">
+                        <Avatar className="w-16 h-16 mx-auto mb-3 border-4 border-white shadow-lg">
+                          <AvatarImage src={child.carengrowCoordinator.photoUrl} />
+                          <AvatarFallback className="bg-blue-100 text-blue-700">
+                            {child.carengrowCoordinator.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h6 className="font-semibold text-blue-800">{child.carengrowCoordinator.name}</h6>
+                        <p className="text-sm text-blue-600">ID: {child.carengrowCoordinator.id}</p>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm text-slate-700">{child.carengrowCoordinator.phone}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MessageSquare className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm text-slate-700">{child.carengrowCoordinator.email}</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="text-center p-3 bg-white/70 rounded-lg">
+                          <div className="text-xl font-bold text-blue-600">{child.carengrowCoordinator.centersAssigned}</div>
+                          <div className="text-xs text-slate-600">Centers</div>
+                        </div>
+                        <div className="text-center p-3 bg-white/70 rounded-lg">
+                          <div className="text-xl font-bold text-blue-600">{child.carengrowCoordinator.totalChildrenUnderCare}</div>
+                          <div className="text-xs text-slate-600">Children</div>
+                        </div>
+                      </div>
+
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        <PhoneCall className="w-4 h-4 mr-2" />
+                        Call Coordinator
+                      </Button>
+                    </div>
+
+                    {/* Parent Information */}
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-6">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <Heart className="w-6 h-6 text-purple-600" />
+                        <h5 className="font-semibold text-purple-800">Primary Caregiver</h5>
+                      </div>
+
+                      <div className="text-center mb-4">
+                        <Avatar className="w-16 h-16 mx-auto mb-3 border-4 border-white shadow-lg">
+                          <AvatarImage src={child.parentPhotoUrl} />
+                          <AvatarFallback className="bg-purple-100 text-purple-700">
+                            {child.parentName.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h6 className="font-semibold text-purple-800">{child.parentName}</h6>
+                        <p className="text-sm text-purple-600">Parent/Guardian</p>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-purple-600" />
+                          <span className="text-sm text-slate-700">{child.parentPhone}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Home className="w-4 h-4 text-purple-600" />
+                          <span className="text-sm text-slate-700">{child.address}</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div>
+                          <h6 className="font-medium text-purple-800 mb-2">Current Interventions</h6>
+                          <div className="space-y-1">
+                            {child.interventions.map((intervention, index) => (
+                              <Badge key={index} variant="outline" className="text-purple-700 border-purple-300 bg-purple-50 mr-2 mb-1">
+                                {intervention}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h6 className="font-medium text-purple-800 mb-2">Risk Factors</h6>
+                          <div className="space-y-1">
+                            {child.riskFactors.map((factor, index) => (
+                              <Badge key={index} variant="outline" className="text-orange-700 border-orange-300 bg-orange-50 mr-2 mb-1">
+                                {factor}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white mt-4">
+                        <Video className="w-4 h-4 mr-2" />
+                        Schedule Visit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* 2. Screening History Section */}
+          <AccordionItem value="developmental-ages" className="bg-white/80 backdrop-blur-sm border border-rose-200 rounded-xl shadow-lg">
             <AccordionTrigger className="px-6 py-4 hover:no-underline">
               <div className="flex items-center space-x-3">
                 <BarChart3 className="w-6 h-6 text-blue-600" />
@@ -579,8 +862,8 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                       </div>
                       <div className="flex items-center space-x-2">
                         {screening.reportGenerated && (
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             onClick={() => generateNeuroDevelopmentalReport(screening.screeningNumber, child)}
                             className="bg-white/80 hover:bg-blue-50 border-blue-200"
@@ -592,16 +875,16 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                         {screening.schoolReadinessScore && screeningIndex > 0 && (
                           <div className="flex items-center space-x-1">
                             {getScoreChange(
-                              screening.schoolReadinessScore, 
+                              screening.schoolReadinessScore,
                               multipleScreeningResults[screeningIndex - 1]?.schoolReadinessScore
                             )?.icon}
                             <span className="text-sm font-medium">
                               {getScoreChange(
-                                screening.schoolReadinessScore, 
+                                screening.schoolReadinessScore,
                                 multipleScreeningResults[screeningIndex - 1]?.schoolReadinessScore
                               )?.change > 0 ? '+' : ''}
                               {getScoreChange(
-                                screening.schoolReadinessScore, 
+                                screening.schoolReadinessScore,
                                 multipleScreeningResults[screeningIndex - 1]?.schoolReadinessScore
                               )?.change}%
                             </span>
@@ -609,11 +892,11 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {screening.results.map((result, resultIndex) => (
                         <div key={resultIndex} className={`p-4 rounded-xl border-2 ${
-                          result.score ? 
+                          result.score ?
                             result.status === 'normal' ? 'bg-emerald-50 border-emerald-200' :
                             result.status === 'concern' ? 'bg-amber-50 border-amber-200' :
                             'bg-rose-50 border-rose-200'
@@ -627,7 +910,7 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                               </Badge>
                             )}
                           </div>
-                          
+
                           {result.score ? (
                             <>
                               <div className="mb-3">
@@ -635,8 +918,8 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                                   <span>Score</span>
                                   <span className="font-medium">{result.score}/{result.maxScore}</span>
                                 </div>
-                                <Progress 
-                                  value={(result.score / result.maxScore) * 100} 
+                                <Progress
+                                  value={(result.score / result.maxScore) * 100}
                                   className={`h-2 ${
                                     result.status === 'normal' ? 'bg-emerald-100' :
                                     result.status === 'concern' ? 'bg-amber-100' :
@@ -644,11 +927,11 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                                   }`}
                                 />
                               </div>
-                              
+
                               <div className="text-xs text-slate-600 mb-2">
                                 School Readiness Contribution: {result.schoolReadinessContribution}%
                               </div>
-                              
+
                               {result.recommendations.length > 0 && (
                                 <div>
                                   <h6 className="text-xs font-medium text-slate-700 mb-1">Recommendations:</h6>
@@ -677,28 +960,25 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
               </div>
             </AccordionContent>
           </AccordionItem>
-
-          {/* 2. Enhanced Developmental Ages Section with Horizontal Progression */}
-          <AccordionItem value="developmental-ages" className="bg-white/80 backdrop-blur-sm border border-rose-200 rounded-xl shadow-lg">
+          {/* 3. Enhanced Delta Change Analysis Section with DQ Focus */}
+          <AccordionItem value="delta-analysis" className="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl shadow-lg">
             <AccordionTrigger className="px-6 py-4 hover:no-underline">
               <div className="flex items-center space-x-3">
-                <Brain className="w-6 h-6 text-violet-600" />
+                <LineChartIcon className="w-6 h-6 text-indigo-600" />
                 <div className="text-left">
-                  <h3 className="text-lg font-semibold">Developmental Age Assessment</h3>
-                  <p className="text-sm text-gray-600">Horizontal progression tracking and school readiness mapping across screenings</p>
+                  <h3 className="text-lg font-semibold text-indigo-800">DQ Delta Change Analysis</h3>
+                  <p className="text-sm text-indigo-700">Developmental Quotient trends and progress tracking across screening periods</p>
                 </div>
               </div>
             </AccordionTrigger>
             <AccordionContent className="px-6 pb-6">
               <div className="space-y-8">
-                
-                {/* Growth Trajectory Visualization */}
                 <div className="bg-gradient-to-br from-violet-50 to-purple-50 p-6 rounded-xl border border-violet-200">
                   <h4 className="font-semibold text-violet-800 mb-4 flex items-center space-x-2">
                     <TrendIcon className="w-5 h-5" />
                     <span>Developmental Age Progression vs Ideal Growth Journey</span>
                   </h4>
-                  
+
                   <div className="h-96 mb-6">
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={progressionData}>
