@@ -619,6 +619,215 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                     </div>
                   </div>
                 </div>
+
+                {/* Support Team Sub-section */}
+                <div>
+                  <h4 className="text-lg font-semibold text-indigo-800 mb-6 flex items-center space-x-2">
+                    <UserCheck className="w-5 h-5" />
+                    <span>Care & Support Team</span>
+                  </h4>
+
+                  {/* Child Personal Information */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl mb-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <User className="w-6 h-6 text-blue-600" />
+                        <h5 className="font-semibold text-blue-800">Personal Information</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Baby className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Age: 3 years (36 months)</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Born: 2021-05-15</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Village: Kuppam, Mandal: Kuppam, District: Chittoor</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <Heart className="w-6 h-6 text-purple-600" />
+                        <h5 className="font-semibold text-purple-800">Family Contact</h5>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Users className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">Parent: Priya Sharma</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-slate-600" />
+                          <span className="text-sm text-slate-600">+91 9876543210</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Care Team Members */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Anganwadi Teacher */}
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <BookOpen className="w-6 h-6 text-green-600" />
+                        <h5 className="font-semibold text-green-800">Anganwadi Teacher</h5>
+                      </div>
+
+                      <div className="text-center mb-4">
+                        <Avatar className="w-16 h-16 mx-auto mb-3 border-4 border-white shadow-lg">
+                          <AvatarImage src={child.anganwadiTeacher.photoUrl} />
+                          <AvatarFallback className="bg-green-100 text-green-700">
+                            {child.anganwadiTeacher.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h6 className="font-semibold text-green-800">Sunitha Reddy</h6>
+                        <p className="text-sm text-green-600">ID: AWT-2018-045</p>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-slate-700">+91 9876501234</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <GraduationCap className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-slate-700">B.Ed, Early Childhood Care & Education</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Award className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-slate-700">6 years experience</span>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-green-200 mb-4">
+                        <h6 className="font-medium text-green-800 mb-2">Anganwadi Center</h6>
+                        <div className="space-y-1">
+                          <div className="text-sm text-slate-700">Kuppam Town Anganwadi Center 12</div>
+                          <div className="text-sm text-slate-600">Ward 7, Kuppam Town, Kuppam Mandal</div>
+                          <div className="text-sm text-slate-600">
+                            Code: AWC012 • 78 children
+                          </div>
+                        </div>
+                      </div>
+
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Contact Teacher
+                      </Button>
+                    </div>
+
+                    {/* Carengrow Coordinator */}
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <UserCheck className="w-6 h-6 text-blue-600" />
+                        <h5 className="font-semibold text-blue-800">Carengrow Coordinator</h5>
+                      </div>
+
+                      <div className="text-center mb-4">
+                        <Avatar className="w-16 h-16 mx-auto mb-3 border-4 border-white shadow-lg">
+                          <AvatarImage src={child.carengrowCoordinator.photoUrl} />
+                          <AvatarFallback className="bg-blue-100 text-blue-700">
+                            {child.carengrowCoordinator.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h6 className="font-semibold text-blue-800">Dr. Meera Devi</h6>
+                        <p className="text-sm text-blue-600">ID: CG-COORD-003</p>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm text-slate-700">+91 9876512345</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MessageSquare className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm text-slate-700">meera.devi@carengrow.org</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="text-center p-3 bg-white/70 rounded-lg">
+                          <div className="text-xl font-bold text-blue-600">4</div>
+                          <div className="text-xs text-slate-600">Centers</div>
+                        </div>
+                        <div className="text-center p-3 bg-white/70 rounded-lg">
+                          <div className="text-xl font-bold text-blue-600">285</div>
+                          <div className="text-xs text-slate-600">Children</div>
+                        </div>
+                      </div>
+
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        <PhoneCall className="w-4 h-4 mr-2" />
+                        Call Coordinator
+                      </Button>
+                    </div>
+
+                    {/* Primary Caregiver */}
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-6">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <Heart className="w-6 h-6 text-purple-600" />
+                        <h5 className="font-semibold text-purple-800">Primary Caregiver</h5>
+                      </div>
+
+                      <div className="text-center mb-4">
+                        <Avatar className="w-16 h-16 mx-auto mb-3 border-4 border-white shadow-lg">
+                          <AvatarImage src={child.parentPhotoUrl} />
+                          <AvatarFallback className="bg-purple-100 text-purple-700">
+                            {child.parentName.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <h6 className="font-semibold text-purple-800">Priya Sharma</h6>
+                        <p className="text-sm text-purple-600">Parent/Guardian</p>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-purple-600" />
+                          <span className="text-sm text-slate-700">+91 9876543210</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Home className="w-4 h-4 text-purple-600" />
+                          <span className="text-sm text-slate-700">Village: Kuppam, Mandal: Kuppam, District: Chittoor</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div>
+                          <h6 className="font-medium text-purple-800 mb-2">Current Interventions</h6>
+                          <div className="space-y-1">
+                            <Badge variant="outline" className="text-purple-700 border-purple-300 bg-purple-50 mr-2 mb-1">
+                              Speech Therapy
+                            </Badge>
+                            <Badge variant="outline" className="text-purple-700 border-purple-300 bg-purple-50 mr-2 mb-1">
+                              Parent Training
+                            </Badge>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h6 className="font-medium text-purple-800 mb-2">Risk Factors</h6>
+                          <div className="space-y-1">
+                            <Badge variant="outline" className="text-orange-700 border-orange-300 bg-orange-50 mr-2 mb-1">
+                              Speech Development Delay
+                            </Badge>
+                            <Badge variant="outline" className="text-orange-700 border-orange-300 bg-orange-50 mr-2 mb-1">
+                              Social Interaction
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white mt-4">
+                        <Video className="w-4 h-4 mr-2" />
+                        Schedule Visit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </AccordionContent>
           </AccordionItem>
