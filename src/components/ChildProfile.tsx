@@ -511,6 +511,7 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
 
   // Generate sections array with conditional referral journey - Updated order
   const accordionSections = [
+    "child-profile-team",
     "screening-history",
     "developmental-ages",
     "delta-analysis",
@@ -543,13 +544,86 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
           </Button>
         </div>
 
-        {/* Collapsible Sections using Accordion */}
-        <Accordion type="multiple" defaultValue={accordionSections} className="space-y-4">
+                {/* Collapsible Sections using Accordion */}
+        <Accordion type="multiple" defaultValue={["child-profile-team", ...accordionSections.slice(1)]} className="space-y-4">
 
+          {/* 1. Child Profile & Support Team Section */}
+          <AccordionItem value="child-profile-team" className="bg-white/80 backdrop-blur-sm border border-rose-200 rounded-xl shadow-lg">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline">
+              <div className="flex items-center space-x-3">
+                <Users className="w-6 h-6 text-indigo-600" />
+                <div className="text-left">
+                  <h3 className="text-lg font-semibold">Child Profile & Support Team</h3>
+                  <p className="text-sm text-gray-600">Child information, quick stats, family contact details, and care team members</p>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-6 pb-6">
+              <div className="space-y-8">
 
+                {/* Child Header Information */}
+                <div className="bg-gradient-to-r from-rose-100 via-pink-100 to-orange-100 rounded-2xl p-6 shadow-lg border border-rose-200">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Child Photo & Basic Info */}
+                    <div className="lg:col-span-1">
+                      <div className="text-center space-y-3">
+                        <div className="relative inline-block">
+                          <Avatar className="w-24 h-24 border-4 border-white shadow-xl">
+                            <AvatarImage src={child.photoUrl} alt={child.name} />
+                            <AvatarFallback className="bg-gradient-to-br from-pink-200 to-orange-200">
+                              {child.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="absolute -bottom-1 -right-1">
+                            <Badge className={`${getChildStatusColor(child.status)} text-xs`}>
+                              {child.status.replace('-', ' ')}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div>
+                          <h1 className="text-xl font-bold text-slate-800">{child.name}</h1>
+                          <p className="text-sm text-slate-600">{child.age} years • {child.gender === 'M' ? 'Male' : 'Female'}</p>
+                          {isEligibleForReferralJourney && (
+                            <Badge className="text-xs bg-purple-100 text-purple-700 border-purple-200 mt-2">
+                              <Route className="w-3 h-3 mr-1" />
+                              Referral Journey Active
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
 
+                    {/* Quick Stats */}
+                    <div className="lg:col-span-2">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className="text-xl font-bold text-emerald-600">{child.schoolReadinessScore}%</div>
+                          <div className="text-sm text-slate-600">School Readiness</div>
+                        </div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className="text-xl font-bold text-orange-600">{consolidatedStats.areasOfConcern}</div>
+                          <div className="text-sm text-slate-600">Areas of Concern</div>
+                        </div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className="text-xl font-bold text-violet-600">{consolidatedStats.totalInterventions}</div>
+                          <div className="text-sm text-slate-600">Interventions</div>
+                        </div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-3 text-center border border-rose-200">
+                          <div className={`text-xl font-bold ${getRiskLevelColor(consolidatedStats.riskLevel).includes('rose') ? 'text-rose-600' :
+                            getRiskLevelColor(consolidatedStats.riskLevel).includes('orange') ? 'text-orange-600' : 'text-emerald-600'}`}>
+                            {consolidatedStats.riskLevel}
+                          </div>
+                          <div className="text-sm text-slate-600">Risk Level</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
 
-          {/* 1. Screening History Section */}
+          {/* 2. Screening History Section */}
           <AccordionItem value="screening-history" className="bg-white/80 backdrop-blur-sm border border-rose-200 rounded-xl shadow-lg">
             <AccordionTrigger className="px-6 py-4 hover:no-underline">
               <div className="flex items-center space-x-3">
@@ -581,8 +655,8 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                       </div>
                       <div className="flex items-center space-x-2">
                         {screening.reportGenerated && (
-                          <Button
-                            variant="outline"
+                          <Button 
+                            variant="outline" 
                             size="sm"
                             onClick={() => generateNeuroDevelopmentalReport(screening.screeningNumber, child)}
                             className="bg-white/80 hover:bg-blue-50 border-blue-200"
@@ -594,16 +668,16 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                         {screening.schoolReadinessScore && screeningIndex > 0 && (
                           <div className="flex items-center space-x-1">
                             {getScoreChange(
-                              screening.schoolReadinessScore,
+                              screening.schoolReadinessScore, 
                               multipleScreeningResults[screeningIndex - 1]?.schoolReadinessScore
                             )?.icon}
                             <span className="text-sm font-medium">
                               {getScoreChange(
-                                screening.schoolReadinessScore,
+                                screening.schoolReadinessScore, 
                                 multipleScreeningResults[screeningIndex - 1]?.schoolReadinessScore
                               )?.change > 0 ? '+' : ''}
                               {getScoreChange(
-                                screening.schoolReadinessScore,
+                                screening.schoolReadinessScore, 
                                 multipleScreeningResults[screeningIndex - 1]?.schoolReadinessScore
                               )?.change}%
                             </span>
@@ -611,11 +685,11 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                         )}
                       </div>
                     </div>
-
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {screening.results.map((result, resultIndex) => (
                         <div key={resultIndex} className={`p-4 rounded-xl border-2 ${
-                          result.score ?
+                          result.score ? 
                             result.status === 'normal' ? 'bg-emerald-50 border-emerald-200' :
                             result.status === 'concern' ? 'bg-amber-50 border-amber-200' :
                             'bg-rose-50 border-rose-200'
@@ -629,7 +703,7 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                               </Badge>
                             )}
                           </div>
-
+                          
                           {result.score ? (
                             <>
                               <div className="mb-3">
@@ -637,8 +711,8 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                                   <span>Score</span>
                                   <span className="font-medium">{result.score}/{result.maxScore}</span>
                                 </div>
-                                <Progress
-                                  value={(result.score / result.maxScore) * 100}
+                                <Progress 
+                                  value={(result.score / result.maxScore) * 100} 
                                   className={`h-2 ${
                                     result.status === 'normal' ? 'bg-emerald-100' :
                                     result.status === 'concern' ? 'bg-amber-100' :
@@ -646,11 +720,11 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                                   }`}
                                 />
                               </div>
-
+                              
                               <div className="text-xs text-slate-600 mb-2">
                                 School Readiness Contribution: {result.schoolReadinessContribution}%
                               </div>
-
+                              
                               {result.recommendations.length > 0 && (
                                 <div>
                                   <h6 className="text-xs font-medium text-slate-700 mb-1">Recommendations:</h6>
@@ -697,7 +771,7 @@ export function ChildProfile({ childId, onBack }: ChildProfileProps) {
                     <TrendIcon className="w-5 h-5" />
                     <span>Developmental Age Progression vs Ideal Growth Journey</span>
                   </h4>
-
+                  
                   <div className="h-96 mb-6">
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={progressionData}>
